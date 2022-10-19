@@ -5,10 +5,10 @@ log() {
 }
 
 log "Building"
-cabal build -O0 --enable-tests --ghc-option=-Werror
+cabal v1-build --ghc-option=-O0 --ghc-option=-Werror
 
 log "Testing"
-cabal test -O0 --test-show-details=direct
+cabal v1-test --ghc-option=-O0
 cabal check
 
 log "Doctests"
