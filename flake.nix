@@ -25,11 +25,16 @@
         xterm
         autocutsel
       ];
+
+      # manually adds build dependencies that are not managed by cabal2nix
+      addExtraDeps = drv:
+        pkgs.haskell.lib.addBuildDepends drv ([ hsPkgs.tasty-discover ]);
+
     in {
       packages."x86_64-linux".default =
         pkgs.haskell.lib.justStaticExecutables hsPkgs.butler;
       devShell."x86_64-linux" = hsPkgs.shellFor {
-        packages = p: [ p.butler ];
+        packages = p: [ (addExtraDeps p.butler) ];
         buildInputs = with pkgs;
           [
             hpack
@@ -38,6 +43,7 @@
             haskell-language-server
             fourmolu
             hsPkgs.doctest
+            hsPkgs.tasty-discover
           ] ++ desktop;
       };
     };
